@@ -1,0 +1,61 @@
+import React from "react";
+export const addItemToCart = (item, next) => {
+  let cart = [];
+  if (typeof window !== undefined) {
+    if (localStorage.getItem("cart")) {
+      cart = JSON.parse(localStorage.getItem("cart"));
+    }
+    cart.push({ ...item, count: 1 });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    next();
+  }
+};
+
+export const loadcart = () => {
+  if (typeof window !== undefined) {
+    if (localStorage.getItem("cart")) {
+      return JSON.parse(localStorage.getItem("cart"));
+    }
+  }
+};
+
+export const totalAmount = () => {
+  let products = [];
+  let amount = 0;
+  if (typeof window !== undefined) {
+    if (localStorage.getItem("cart")) {
+      products = JSON.parse(localStorage.getItem("cart"));
+    }
+  }
+
+  products.map((product) => (amount += product.price));
+  return amount;
+};
+
+export const removeItemFromCart = (productId) => {
+  let cart = [];
+  if (typeof window !== undefined) {
+    cart = JSON.parse(localStorage.getItem("cart"));
+  }
+  cart.map((product, index) => {
+    if (product._id === productId) {
+      cart.splice(index, 1);
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+  });
+  return cart;
+};
+
+export const cartEmpty = () => {
+  if (typeof window !== undefined) {
+    localStorage.removeItem("cart");
+  }
+  let cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  return (
+    <div class="alert alert-success text-center" role="alert">
+      <h1> Your Order Placed Successfully!</h1>
+    </div>
+  );
+};
